@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ServerComponent implements OnInit {
 
-  constructor() { }
+  serverStatus: String;
+  serverName: String;
+
+  constructor() {
+    this.serverStatus = "down";
+    this.serverName = "unknown";
+  }
 
   ngOnInit() {
+  }
+
+  startServer() {
+    this.serverStatus = "up";
   }
 
 }

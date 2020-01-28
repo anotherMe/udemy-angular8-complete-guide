@@ -12,4 +12,7 @@ export class ServersComponent implements OnInit {
   ngOnInit() {
   }
 
+  stopAllServers() {
+      console.log("This method still does nothing");
+  }
 }

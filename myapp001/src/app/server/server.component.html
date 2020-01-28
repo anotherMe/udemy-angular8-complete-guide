@@ -1,3 +1,7 @@
 <div class="">
-  <p>Hello, this is <b>server</b> component</p>
+  <label for="serverName">Nome:</label>
+  <input type="text" name="serverName" [(ngModel)]="serverName">
+  <p>Server {{ serverName}} is <b>{{ serverStatus }}</b></p>
+  <input type="button" value="Start" (click)="startServer()">
+  <hr>
 </div>
