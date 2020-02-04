@@ -9,12 +9,10 @@ export class CockpitComponent implements OnInit {
 
   @ViewChild('serverNameInput', { static: false }) srvNameInput: ElementRef;
   @ViewChild('serverContentInput', { static: false }) srvContentInput: ElementRef;
-
   @Output() serverCreated = new EventEmitter<{ type: string, name: string, content: string}>();
   @Output() blueprintCreated = new EventEmitter<{ type: string, name: string, content: string}>();
-
-  // newServerName = '';
-  // newServerContent = '';
+  newServerName = '';
+  newServerContent = '';
 
   constructor() { }
 
@@ -29,7 +27,7 @@ export class CockpitComponent implements OnInit {
   //   this.serverCreated.emit({ name: nameInput.value, content: contentInput.value });
   // }
 
-  onAddServer(nameInput: HTMLInputElement) {
+  onAddServer() {
     this.serverCreated.emit({ type: 'server', name: this.srvNameInput.nativeElement.value,
       content: this.srvContentInput.nativeElement.value });
   }
@@ -38,10 +36,8 @@ export class CockpitComponent implements OnInit {
   //   this.blueprintCreated.emit({ name: this.newServerName, content: this.newServerContent});
   // }
 
-  onAddBlueprint(nameInput: HTMLInputElement) {
-    // this.blueprintCreated.emit({ type: 'blueprint', name: nameInput, content: contentInput });
-    this.blueprintCreated.emit({ type: 'blueprint', name: this.srvNameInput.nativeElement.value,
-      content: this.srvContentInput.nativeElement.value });
+  onAddBlueprint(nameInput, contentInput) {
+    this.blueprintCreated.emit({ type: 'blueprint', name: nameInput, content: contentInput });
   }
 
 }
