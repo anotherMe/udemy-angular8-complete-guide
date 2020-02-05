@@ -1,12 +1,17 @@
-<app-header></app-header>
+<app-header #header></app-header>
 <div class="container">
   <div class="row">
-    <div class="col-xs-12">
+
+    <div *ngIf="header.activeSection === mySections.recipes"
+      class="col-xs-12">
       <h2>I'm working</h2>
       <app-recipes></app-recipes>
     </div>
-    <div class="col-xs-12">
+
+    <div *ngIf="header.activeSection === mySections.shopping"
+      class="col-xs-12">
       <app-shopping-list></app-shopping-list>
     </div>
+
   </div>
 </div>

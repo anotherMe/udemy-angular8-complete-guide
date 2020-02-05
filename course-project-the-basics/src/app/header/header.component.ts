@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Sections } from './sections';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  private activeSection: Sections;
+  public mySections:object = Sections; // in order to use the enum inside the template
+
+  constructor() {
+    this.activeSection = Sections.recipes;
+  }
 
   ngOnInit() {
+  }
+
+  navGoToRecipes() {
+    this.activeSection = Sections.recipes;
+  }
+
+  navGoToShoppingList() {
+    this.activeSection = Sections.shopping;
   }
 
 }
