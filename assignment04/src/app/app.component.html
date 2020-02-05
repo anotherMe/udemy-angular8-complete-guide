@@ -1,0 +1,7 @@
+
+<app-game-control #controller></app-game-control>
+
+<div *ngFor="let num of controller.gameNumberArr">
+  <app-even *ngIf="num % 2 === 0" [myNumber]="num" ></app-even>
+  <app-odd *ngIf="num % 2 !== 0" [myNumber]="num"></app-odd>
+</div>
