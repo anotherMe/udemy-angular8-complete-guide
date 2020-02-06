@@ -1,7 +1,7 @@
 
 <div class="row">
   <div *ngFor="let item of recipes" class="col-xs-12">
-    <app-recipe-item [recipe]="item" (recipeClicked)="onRecipeClicked($event)">
+    <app-recipe-item [recipe]="item">
     </app-recipe-item>
     <div style="height: 5px;">
     </div>

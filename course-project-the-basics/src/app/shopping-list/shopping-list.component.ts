@@ -1,28 +1,24 @@
-import { Component, OnInit } from '@angular/core';
 
+import { Component, OnInit } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from './shopping-list.service';
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
-  styleUrls: ['./shopping-list.component.css']
+  styleUrls: ['./shopping-list.component.css'],
+  providers: []
 })
 export class ShoppingListComponent implements OnInit {
 
-  ingredients: Ingredient[] = [
-    new Ingredient('Guanciale', '70g'),
-    new Ingredient('Salsa pomodoro', 'qb')
-  ];
+  public ingredients: Ingredient[];
 
-  constructor() {
-
+  constructor(private shoppingListService: ShoppingListService) {
   }
 
   ngOnInit() {
-  }
-
-  addIngredient(ing) {
-    this.ingredients.push(ing);
+    // FIXME: are we doing something wrong ?! is this even a binding ?
+    this.ingredients = this.shoppingListService.ingredients;
   }
 
 }
