@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ServersService } from '../servers.service';
+import { Server } from '../server.class';
 
 @Component({
   selector: 'app-edit-server',
@@ -9,23 +10,33 @@ import { ServersService } from '../servers.service';
 })
 export class EditServerComponent implements OnInit {
 
-  server: {id: number, name: string, status: string};
+  server: Server;
+  serverName: string;
+  serverStatus: string;
+  allowEdit = false;
 
-  constructor(private serversService: ServersService, private route: ActivatedRoute) { }
+  constructor(private serversService: ServersService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
 
-    // console.log(this.route.queryParams);
-    // console.log(this.route.fragment);
-    //
-    // // FIXME: complete subscription providing suitable methods
-    // this.route.queryParams.subscribe();
-    // this.route.fragment.subscribe();
+    this.route.params.subscribe( (params: Params) => {
+      this.server = this.serversService.getServer(+params['id']);
+      this.serverName = this.server.name;
+      this.serverStatus = this.server.status;
+    });
 
-    this.server = this.serversService.getServer(1);
+    this.route.queryParams.subscribe( (qParams: Params) => {  
+      this.allowEdit = qParams['allowEdit'] === '1' ? true : false;
+      console.log('Editing is ' + this.allowEdit);
+    });
+
   }
 
   onUpdateServer() {
+
+    this.server.name = this.serverName;
+    this.server.status = this.serverStatus;
     this.serversService.updateServer(this.server);
   }
 
