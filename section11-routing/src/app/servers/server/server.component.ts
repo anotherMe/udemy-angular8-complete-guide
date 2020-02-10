@@ -22,7 +22,7 @@ export class ServerComponent implements OnInit {
     });
   }
 
-  onBtnEditServer(id: number) {
+  onBtnEditServer() {
     this.router.navigate(['edit'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
   }
 
