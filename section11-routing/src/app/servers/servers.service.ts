@@ -1,4 +1,5 @@
 export class ServersService {
+
   private servers = [
     {
       id: 1,
@@ -22,23 +23,28 @@ export class ServersService {
   }
 
   getServer(id: number) {
+
     const server = this.servers.find(
       (s) => {
         return s.id === id;
       }
     );
+
     return server;
   }
 
-  updateServer(id: number, serverInfo: {name: string, status: string}) {
+  updateServer(myServer: {id: number, name: string, status: string}) {
+
     const server = this.servers.find(
       (s) => {
-        return s.id === id;
+        return s.id === myServer.id;
       }
     );
+
     if (server) {
-      server.name = serverInfo.name;
-      server.status = serverInfo.status;
+      server.id = myServer.id;
+      server.name = myServer.name;
+      server.status = myServer.status;
     }
   }
 }

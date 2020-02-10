@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
 import { ServersService } from '../servers.service';
 
 @Component({
@@ -8,20 +8,25 @@ import { ServersService } from '../servers.service';
   styleUrls: ['./edit-server.component.css']
 })
 export class EditServerComponent implements OnInit {
-  server: {id: number, name: string, status: string};
-  serverName = '';
-  serverStatus = '';
 
-  constructor(private serversService: ServersService) { }
+  server: {id: number, name: string, status: string};
+
+  constructor(private serversService: ServersService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    // console.log(this.route.queryParams);
+    // console.log(this.route.fragment);
+    //
+    // // FIXME: complete subscription providing suitable methods
+    // this.route.queryParams.subscribe();
+    // this.route.fragment.subscribe();
+
     this.server = this.serversService.getServer(1);
-    this.serverName = this.server.name;
-    this.serverStatus = this.server.status;
   }
 
   onUpdateServer() {
-    this.serversService.updateServer(this.server.id, {name: this.serverName, status: this.serverStatus});
+    this.serversService.updateServer(this.server);
   }
 
 }

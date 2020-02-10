@@ -21,12 +21,13 @@ export class UserComponent implements OnInit, OnDestroy {
 
       this.user = {
         id: params['id'],
-        name: "Luca"
+        name: params['name']
       };
 
     } );
   }
 
+  // the unsubscription is not necessary for Angular Observables
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
   }
