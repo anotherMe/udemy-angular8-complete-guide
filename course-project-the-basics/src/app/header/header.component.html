@@ -2,23 +2,23 @@
   <div class="container-fluid">
 
     <div class="navbar-header">
-      <a href="#" class="navbar-brand">Recipe book</a>
+      <a [routerLink]="['/']" class="navbar-brand">Recipe book</a>
     </div>
 
     <!-- <div class="collapse navbar-collapse"> -->
     <div class="navbar-default">
 
       <ul class="nav navbar-nav">
-        <li [ngClass]=" activeSection === mySections.recipes ? 'active' : '' "><a href="#" (click)="navGoToRecipes()">Recipes</a></li>
-        <li [ngClass]=" activeSection === mySections.shopping ? 'active' : '' "><a href="#" (click)="navGoToShoppingList()">Shopping list</a></li>
+        <li [routerLinkActive]="['active']" routerLinkActiveOptions="{exact: true}"><a [routerLink]="['recipes']">Recipes</a></li>
+        <li [routerLinkActive]="['active']" routerLinkActiveOptions="{exact: true}"><a [routerLink]="['shoppinglist']">Shopping list</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" appDropdown>
-          <a href="#" class="dropdown-toggle" role="button">Manage <span class="caret"></span></a>
+          <a style="cursor: pointer;" class="dropdown-toggle" role="button">Manage <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Save data</a></li>
-            <li><a href="#">Fetch data</a></li>
+            <li><a style="cursor: pointer;">Save data</a></li>
+            <li><a style="cursor: pointer;">Fetch data</a></li>
           </ul>
         </li>
       </ul>
