@@ -12,9 +12,12 @@ export class AuthService {
     this.loggedIn = false;
   }
 
+  /**
+   * Mock of a call to the server to check if user is authenticated
+   */
   isAuthenticated() {
 
-    const promise = new Promise (
+    const promise = new Promise<{}> (
       (resolve, reject) => {
         setTimeout( () => { resolve(this.loggedIn); }, 300 )
       }

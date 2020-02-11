@@ -16,10 +16,12 @@ export class HomeComponent implements OnInit {
 
   onBtnLogin() {
     this.as.login();
+    console.log('You are now logged in');
   }
 
   onBtnLogout() {
     this.as.logout();
+    console.log('You just logged out');
   }
 
 }
