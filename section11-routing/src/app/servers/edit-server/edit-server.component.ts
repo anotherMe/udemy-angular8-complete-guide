@@ -35,7 +35,7 @@ export class EditServerComponent implements OnInit, CanComponentDeactivate {
       console.log('Editing is ' + this.allowEdit);
     });
 
-  }
+  }  
 
   onUpdateServer() {
 

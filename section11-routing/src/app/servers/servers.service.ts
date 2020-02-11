@@ -32,7 +32,7 @@ export class ServersService {
 
     return server;
   }
-
+  
   updateServer(myServer: {id: number, name: string, status: string}) {
 
     const server = this.servers.find(
