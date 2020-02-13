@@ -1,7 +1,8 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from './shopping-list.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shopping-list',
@@ -9,16 +10,30 @@ import { ShoppingListService } from './shopping-list.service';
   styleUrls: ['./shopping-list.component.css'],
   providers: []
 })
-export class ShoppingListComponent implements OnInit {
+export class ShoppingListComponent implements OnInit, OnDestroy {
 
-  public ingredients: Ingredient[];
+  ingredients: Ingredient[];
+  private ingredientsChangedSubscription: Subscription;
 
   constructor(private shoppingListService: ShoppingListService) {
   }
 
   ngOnInit() {
-    // FIXME: are we doing something wrong ?! is this even a binding ?
-    this.ingredients = this.shoppingListService.ingredients;
+
+    this.ingredients = this.shoppingListService.getIngredients();
+
+    this.ingredientsChangedSubscription = this.shoppingListService.ingredientsChanged.subscribe({
+      next: (ingredients: Ingredient[]) => {
+        console.log("ShoppingListComponent: new ingredient added");
+        this.ingredients = ingredients;
+      },
+      error: () => { console.log("ShoppingListComponent: error !"); },
+      complete: () => { console.log("ShoppingListComponent: complete"); }
+    });
+
   }
 
+  ngOnDestroy() {
+    this.ingredientsChangedSubscription.unsubscribe();
+  }
 }
