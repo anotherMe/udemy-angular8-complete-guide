@@ -27,6 +27,7 @@ export class ShoppingListService {
   }
 
   appendIngredients(ings: Ingredient[]) {
-    ings.map( (ing) => { this.ingredients.push()})
+    ings.map( (ing) => { this.ingredients.push()});
   }
 }
+
