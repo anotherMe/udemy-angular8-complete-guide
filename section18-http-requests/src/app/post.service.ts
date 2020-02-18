@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Post } from './post.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -13,15 +13,11 @@ export class PostService {
 
     createAndStorePost(post: Post) {
 
-        this.http
+        return this.http
         .post<{ name: string }>(
           'https://udemy-angular-course-3f0ca.firebaseio.com/posts.json',
           post
-        )
-        .subscribe(responseData => {
-          console.log(responseData);
-        });
-
+        );
     }
 
     fetchPosts():Observable<any> {
@@ -36,6 +32,23 @@ export class PostService {
             }
             return postArray;
           }))
+
+    }
+
+    deletePost(id: string) {
+
+        const url = `https://udemy-angular-course-3f0ca.firebaseio.com/posts/${id}.json`;
+        const httpOptions = {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+          };
+        return this.http.delete(url);
+        
+    }
+
+    deleteAllPosts() {
+
+        return this.http
+        .delete('https://udemy-angular-course-3f0ca.firebaseio.com/posts.json');
 
     }
 }

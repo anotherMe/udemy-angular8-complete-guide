@@ -55,6 +55,7 @@
       <p *ngIf="loadedPosts.length < 1 && !isLoading">No posts available!</p>
       <ul class="list-group" *ngIf="loadedPosts.length >= 1 && !isLoading">
         <li class="list-group-item" *ngFor="let post of loadedPosts">
+          <button class="btn btn-danger pull-right" (click)="onBtnDelete(post)">Delete</button>
           <h3>{{ post.title }}</h3>
           <p>{{ post.content }}</p>
         </li>

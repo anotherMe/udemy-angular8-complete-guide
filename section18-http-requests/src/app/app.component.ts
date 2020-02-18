@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Post } from './post.model';
 import { PostService } from './post.service';
 import { Observable } from 'rxjs';
+import { retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -29,14 +30,35 @@ export class AppComponent implements OnInit {
   }
 
   onCreatePost(postData: Post) {
-    this.ps.createAndStorePost(postData);
+    this.ps
+    .createAndStorePost(postData)
+    .subscribe(responseData => {
+      console.log(responseData);
+      this.fetchPosts();
+    });
   }
 
   onFetchPosts() {
-   this.fetchPosts(); 
+   this.fetchPosts();
   }
 
   onClearPosts() {
-    // Send Http request
+    this.ps
+    .deleteAllPosts()
+    .subscribe( responseData => {
+      console.log(responseData);
+      this.fetchPosts();
+    });
   }
+
+  onBtnDelete(post: Post) {
+
+    this.ps
+    .deletePost(post.id)
+    .subscribe(responseData => {
+      console.log(responseData);
+      this.fetchPosts();
+    });
+  }
+
 }
