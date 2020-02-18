@@ -51,8 +51,11 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6 col-md-offset-3">
+
       <p *ngIf="isLoading">Loading ...</p>
-      <p *ngIf="loadedPosts.length < 1 && !isLoading">No posts available!</p>
+      
+      <p *ngIf="loadedPosts.length < 1 && !isLoading && !errorMsg">No posts available!</p>
+
       <ul class="list-group" *ngIf="loadedPosts.length >= 1 && !isLoading">
         <li class="list-group-item" *ngFor="let post of loadedPosts">
           <button class="btn btn-danger pull-right" (click)="onBtnDelete(post)">Delete</button>
@@ -60,6 +63,12 @@
           <p>{{ post.content }}</p>
         </li>
       </ul>
+
+      <div *ngIf="errorMsg && !isLoading" class="alert alert-danger">
+        <h3>An error has occured</h3>
+        <p>{{ errorMsg }}</p>
+      </div>
+
     </div>
   </div>
 </div>

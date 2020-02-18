@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Post } from './post.model';
 import { PostService } from './post.service';
-import { Observable } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +13,7 @@ export class AppComponent implements OnInit {
 
   loadedPosts: Post[] = [];
   isLoading = false;
+  errorMsg = '';
 
   constructor(private ps: PostService) {}
 
@@ -23,9 +23,12 @@ export class AppComponent implements OnInit {
 
   private fetchPosts() {
     this.isLoading = true;
-    this.ps.fetchPosts().subscribe( (myPosts) => {
-      this.loadedPosts = myPosts;
+    this.ps.fetchPosts().subscribe( (payload) => {
       this.isLoading = false;
+      this.loadedPosts = payload;
+    }, (payload:HttpErrorResponse) => {
+      this.isLoading = false;
+      this.errorMsg = payload.message;
     });
   }
 
