@@ -22,17 +22,24 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
+
     this.isLoading = true;
+
     this.ps.fetchPosts().subscribe( (payload) => {
+
       this.isLoading = false;
       this.loadedPosts = payload;
+      this.errorMsg = '';
+
     }, (payload:HttpErrorResponse) => {
+
       this.isLoading = false;
       this.errorMsg = payload.message;
     });
   }
 
   onCreatePost(postData: Post) {
+    
     this.ps
     .createAndStorePost(postData)
     .subscribe(responseData => {
