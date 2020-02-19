@@ -1,27 +1,40 @@
-<p>shopping-edit works!</p><div class="row">
+<div class="row">
   <div class="col-xs-10">
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
       <div class="row">
+
         <div class="col-sm-5 form-group">
           <label for="name">Name: </label>
-          <input type="text" id="name" class="form-control" 
-          name="name" ngModel #nameInput>
+          <input type="text" class="form-control" 
+            name="name" ngModel #nameInput required>
         </div>
+
         <div class="col-sm-5 form-group">
           <label for="amount">Amount: </label>
-          <input type="text" id="amount" class="form-control" 
-            name="amount" ngModel #amountInput>
+          <input type="text" class="form-control" 
+            name="amount" ngModel #amountInput required>
         </div>
+
       </div>
-      <div class="row">
+
+      <div class="row" *ngIf="isEditing">
         <div class="col-xs-12">
           <div class="btn-group">
-            <button class="btn btn-success" type="submit">Add</button>
+            <button class="btn btn-success" type="button" (click)="onEditSave()">Save</button>
             <button class="btn btn-danger" type="button" (click)="onBtnDelete()">Delete</button>
-            <button class="btn btn-primary" type="button" (click)="onBtnClear()">Clear</button>
+            <button class="btn btn-primary" type="button" (click)="onEditCancel()">Cancel</button>
           </div>
         </div>
       </div>
+
+      <div class="row" *ngIf="!isEditing">
+        <div class="col-xs-12">
+          <div class="btn-group">
+            <button class="btn btn-success" type="submit" [disabled]="!f.valid">Add</button>
+          </div>
+        </div>
+      </div>
+
     </form>
   </div>
 </div>
