@@ -1,3 +1,118 @@
 
-<p>This is recipe number {{ currentRecipe.id }}</p>
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+
+    <div class="row">
+
+        <div class="col-xs-8">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name"
+                        formControlName="name" >
+                    </div>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="imagePath">Image URL</label>
+                        <input type="text" class="form-control" id="imagePath"
+                        formControlName="imagePath">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea type="text" rows="6" class="form-control" 
+                            id="description" formControlName="description"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xs-4">
+            <img src="" alt="" class="img-responsive">
+        </div>
+
+    </div>
+
+    <hr>
+
+    <!-- ingredients list -->
+
+    <div class="row">
+
+        <div class="col-xs-12">
+            <p><b>Ingredients:</b></p>
+        </div>
+
+        <div formArrayName="ingredients"> <!-- useless, here we need to access ingredients specifying the full path -->
+            <div *ngFor="let control of recipeForm.controls.ingredients.controls; index as i">
+                
+                <div class="col-xs-8">
+                    <div class="form-group">
+                        <input type="text" class="form-control" [formControl]="control.get('name')">
+                    </div>
+                </div>
+                
+                <div class="col-xs-3">
+                    <div class="form-group">
+                        <input type="text" class="form-control" [formControl]="control.get('amount')">
+                    </div>
+                </div>
+                
+                <div class="col-xs-1">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger" (click)="onDeleteIngredient(i)">X</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- add new ingredient -->
+
+    <div class="row">
+
+        <div class="col-xs-8">
+            <div class="form-group">
+                <input type="text" class="form-control">
+            </div>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" class="form-control">
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">Add</button>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group pull-right">
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-primary" (click)="onEditCancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</form>
 
