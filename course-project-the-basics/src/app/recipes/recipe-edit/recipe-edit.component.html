@@ -54,17 +54,17 @@
         </div>
 
         <div formArrayName="ingredients"> <!-- useless, here we need to access ingredients specifying the full path -->
-            <div *ngFor="let control of recipeForm.controls.ingredients.controls; index as i">
+            <div *ngFor="let control of recipeForm.controls.ingredients.controls; index as i" [formGroupName]="i">
                 
                 <div class="col-xs-8">
                     <div class="form-group">
-                        <input type="text" class="form-control" [formControl]="control.get('name')">
+                        <input type="text" class="form-control" formControlName="name">
                     </div>
                 </div>
                 
                 <div class="col-xs-3">
                     <div class="form-group">
-                        <input type="text" class="form-control" [formControl]="control.get('amount')">
+                        <input type="text" class="form-control" formControlName="amount">
                     </div>
                 </div>
                 
