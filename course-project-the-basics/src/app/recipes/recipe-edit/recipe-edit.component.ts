@@ -47,6 +47,7 @@ export class RecipeEditComponent implements OnInit {
 
     // create recipe form
     this.recipeForm = new FormGroup({
+      'id': new FormControl(this.currentRecipe.id),
       'name': new FormControl(this.currentRecipe.name, Validators.required),
       'description': new FormControl(this.currentRecipe.description, Validators.required),
       'imagePath': new FormControl(this.currentRecipe.imagePath, Validators.required),
@@ -63,7 +64,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit() {
-    throw new Error('Not implemented');
+    this.recipeService.saveRecipe(this.recipeForm.value);
   }
 
   onEditCancel() {
