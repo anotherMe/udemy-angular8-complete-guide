@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe.model';
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -25,10 +25,12 @@ export class DataStorageService {
     }
 
     fetchRecipes() {
-        this.http
+
+        return this.http
         .get<Recipe[]>('https://udemy-course-project-def1d.firebaseio.com/recipes.json')
-        .pipe(map(response => {
-            return response.map( recipe => {
+        .pipe(map(recipes => {
+
+            return recipes.map( recipe => {
                 
                 // re-add the array property if Firebase has removed it
                 if (!recipe.ingredients) {
@@ -37,9 +39,11 @@ export class DataStorageService {
 
                 return recipe;
             })
-        }))
-        .subscribe( response => {
-            this.recipeService.setRecipes(response);
-        });
+
+        }), tap(recipes => { // this is a sort of hack in order to be able to return an Observable, which could be possibly used by our RecipesResolverService
+
+            this.recipeService.setRecipes(recipes);
+
+        }));
     }
 }
