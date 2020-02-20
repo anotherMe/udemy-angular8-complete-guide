@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RecipeService } from '../recipe.service';
 import { Recipe } from '../recipe.model';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -35,24 +35,28 @@ export class RecipeEditComponent implements OnInit {
     this.initForm();
   }
 
+  private getNewIngredientFormGroup(name: string, amount: string):FormGroup {
+
+    return new FormGroup({
+      'name': new FormControl(name, Validators.required),
+      'amount': new FormControl(amount, Validators.required)
+    });
+  }
+
   private initForm() {
 
     // create recipe form
     this.recipeForm = new FormGroup({
-      'name': new FormControl(this.currentRecipe.name),
-      'description': new FormControl(this.currentRecipe.description),
-      'imagePath': new FormControl(this.currentRecipe.imagePath),
+      'name': new FormControl(this.currentRecipe.name, Validators.required),
+      'description': new FormControl(this.currentRecipe.description, Validators.required),
+      'imagePath': new FormControl(this.currentRecipe.imagePath, Validators.required),
       'ingredients': new FormArray([])
     });
 
     // add ingredients to recipe form
     for (const ingredient of this.currentRecipe.ingredients) {
 
-      const fg = new FormGroup({
-        'name': new FormControl(ingredient.name),
-        'amount': new FormControl(ingredient.amount)
-      });
-
+      const fg = this.getNewIngredientFormGroup(ingredient.name, ingredient.amount);
       (<FormArray>this.recipeForm.get('ingredients')).push(fg);
     }
 
@@ -67,6 +71,12 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onDeleteIngredient(index: number) {
-    console.log(`You asked to delete ingredient number: ${index}`);
+    (<FormArray>this.recipeForm.get('ingredients')).removeAt(index);
+  }
+
+  onAddIngredient() {
+
+    const fgNewIngredient = this.getNewIngredientFormGroup(null, null);
+    (this.recipeForm.get('ingredients') as FormArray).push(fgNewIngredient);
   }
 }
