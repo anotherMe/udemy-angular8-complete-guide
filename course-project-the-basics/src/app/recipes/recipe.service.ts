@@ -44,7 +44,9 @@ export class RecipeService {
 
   saveRecipe(recipe: Recipe) {
 
-    if (recipe.id === undefined) { // it's a new recipe
+    console.log(recipe);
+
+    if (recipe.id === 0) { // it's a new recipe
 
       recipe.id = this.getNextId();
       this.recipes.push(recipe);
@@ -53,16 +55,20 @@ export class RecipeService {
 
       for (let idx = 0; idx < this.recipes.length; idx++) {
         if (this.recipes[idx].id == recipe.id) 
-          this.recipes[idx] = recipe; // replace the recipe
+          this.recipes[idx] = recipe; // replace the recipe at given position
       }
     }
     
     this.recipeListChanged.next(this.recipes);
   }
 
+  deleteRecipe(id: number) {
 
-  deleteRecipe(index: number) {
-    this.recipes.splice(index, 1);
+    for (let idx = 0; idx < this.recipes.length; idx++) {
+      if (this.recipes[idx].id == id) 
+        this.recipes.splice(idx, 1);
+    }
+
     this.recipeListChanged.next(this.recipes);
   }
 

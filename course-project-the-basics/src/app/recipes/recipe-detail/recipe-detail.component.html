@@ -18,7 +18,7 @@
         <ul class="dropdown-menu">
           <li><a style="cursor: pointer;" (click)="onBtnToShoppingList()">to Shopping list</a></li>
           <li><a [routerLink]="['/recipes', 'edit', currentRecipe.id]" style="cursor: pointer;">Edit recipe</a></li>
-          <li><a style="cursor: pointer;">Delete recipe</a></li>
+          <li><a (click)="onDeleteRecipe(currentRecipe.id)" style="cursor: pointer;">Delete recipe</a></li>
         </ul>
       </div>
     </div>
