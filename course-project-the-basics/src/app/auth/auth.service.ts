@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError, Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { throwError, Subject, BehaviorSubject } from 'rxjs';
+import { User } from './user.model';
 
 export interface AuthResponseData {
 
@@ -20,35 +21,54 @@ export interface AuthResponseData {
 export class AuthService {
 
     private FIREBASE_API_KEY = 'AIzaSyD1Gm7KQfrmCfP9GepBLpY6wOj5OI9B0ec';
+    //public userSubject = new BehaviorSubject<User>(null);
+    public userSubject = new Subject<User>();
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient) { 
 
     }
 
     signUp(_email: string, _password: string) {
 
-        return this.postRequest('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' 
-                + this.FIREBASE_API_KEY, _email, _password)
-
-    }
-
-    signIn(_email: string, _password: string) {
-        
-        return this.postRequest('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' 
-                + this.FIREBASE_API_KEY, _email, _password)
-    }
-
-    private postRequest(url: string, _email: string, _password: string) {
-
         return this.http
-        .post<AuthResponseData>(url, {
+        .post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + this.FIREBASE_API_KEY, {
 
             email: _email,
             password: _password,
             returnSecureToken: true
         })
-        .pipe(catchError(this.handleError));
+        .pipe(
+            catchError(this.handleError), 
+            //tap(this.handleAuthentication) // NO: "this" get dereferenced if using this syntax
+            tap(resData => {
+                this.handleAuthentication(resData);
+              })
+        );
+    }
 
+    signIn(_email: string, _password: string) {
+
+        return this.http
+        .post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + this.FIREBASE_API_KEY, {
+
+            email: _email,
+            password: _password,
+            returnSecureToken: true
+        })
+        .pipe(
+            catchError(this.handleError), 
+            //tap(this.handleAuthentication) // NO: "this" get dereferenced if using this syntax
+            tap(resData => {
+                this.handleAuthentication(resData);
+              })
+        );
+
+    }
+
+    private handleAuthentication(respData: AuthResponseData) {
+        const expirationDate = new Date(new Date().getTime() + +respData.expiresIn * 1000);
+        const user = new User(respData.email, respData.localId, respData.idToken, expirationDate);
+        this.userSubject.next(user);
     }
 
     private handleError(err: HttpErrorResponse) {
