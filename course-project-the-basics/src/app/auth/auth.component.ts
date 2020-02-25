@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthService, AuthResponseData } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -28,38 +29,33 @@ export class AuthComponent implements OnInit {
 
   submitForm(form: NgForm) {
 
+    if (!form.valid) {
+      this.error = 'Some errors are present. Please correct them before submitting';
+      return;
+    }
+
     this.isLoading = true;
 
+    let authObs: Observable<AuthResponseData>;
+
     if (this.loginMode) {
-
-      this.authService
-      .signIn(form.value.email, form.value.password)
-      .subscribe(response => {
-
-        this.isLoading = false;
-        this.error = null;
-        console.log(response);
-
-      }, errorMessage => {
-        this.isLoading = false;
-        this.error = errorMessage;
-      });
-
+      authObs = this.authService.signIn(form.value.email, form.value.password);
     } else {
-      
-      this.authService
-      .signUp(form.value.email, form.value.password)
-      .subscribe(response => {
-
-        this.isLoading = false;
-        this.error = null;
-        console.log(response);
-
-      }, errorMessage => {
-        this.isLoading = false;
-        this.error = errorMessage;
-      });
+      authObs = this.authService.signUp(form.value.email, form.value.password);
     }
+
+    authObs.subscribe(response => {
+
+      this.isLoading = false;
+      this.error = null;
+      console.log(response);
+
+    }, errorMessage => {
+      
+      this.isLoading = false;
+      this.error = errorMessage;
+    });
+
   }
 
 }
