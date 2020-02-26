@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe.model';
 
-import { map, tap } from 'rxjs/operators';
+import { map, tap, take, exhaustMap } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 
 @Injectable({
@@ -11,7 +12,12 @@ import { map, tap } from 'rxjs/operators';
 })
 export class DataStorageService {
 
-    constructor(private http: HttpClient, private recipeService: RecipeService) {
+    constructor(
+        private http: HttpClient, 
+        private recipeService: RecipeService, 
+        private authService: AuthService        
+    ) {
+
     }
 
     storeRecipes() {
@@ -26,24 +32,36 @@ export class DataStorageService {
 
     fetchRecipes() {
 
-        return this.http
-        .get<Recipe[]>('https://udemy-course-project-def1d.firebaseio.com/recipes.json')
-        .pipe(map(recipes => {
+        // See Udemy - Angular Complete Guide, lesson 300
+        return this.authService.userSubject
+        .pipe(
+            
+            take(1),
+        
+            exhaustMap( user => {
 
-            return recipes.map( recipe => {
-                
-                // re-add the array property if Firebase has removed it
-                if (!recipe.ingredients) {
-                    recipe.ingredients = [];
-                }
+                return this.http.get<Recipe[]>('https://udemy-course-project-def1d.firebaseio.com/recipes.json', {
+                    params: new HttpParams().set('auth', user.token)
+                });
 
-                return recipe;
+            }), map(recipes => {
+
+                return recipes.map( recipe => {
+                    
+                    // re-add the array property if Firebase has removed it
+                    if (!recipe.ingredients) {
+                        recipe.ingredients = [];
+                    }
+
+                    return recipe;
+                })
+
+            }), tap(recipes => { // this is a sort of hack in order to be able to return an Observable, which could be possibly used by our RecipesResolverService
+
+                this.recipeService.setRecipes(recipes);
+
             })
-
-        }), tap(recipes => { // this is a sort of hack in order to be able to return an Observable, which could be possibly used by our RecipesResolverService
-
-            this.recipeService.setRecipes(recipes);
-
-        }));
+        
+        );
     }
 }

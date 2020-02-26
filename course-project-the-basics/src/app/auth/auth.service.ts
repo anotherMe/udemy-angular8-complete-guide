@@ -21,11 +21,9 @@ export interface AuthResponseData {
 export class AuthService {
 
     private FIREBASE_API_KEY = 'AIzaSyD1Gm7KQfrmCfP9GepBLpY6wOj5OI9B0ec';
-    //public userSubject = new BehaviorSubject<User>(null);
-    public userSubject = new Subject<User>();
+    public userSubject = new BehaviorSubject<User>(null);
 
-    constructor(private http: HttpClient) { 
-
+    constructor(private http: HttpClient) {
     }
 
     signUp(_email: string, _password: string) {
@@ -39,7 +37,7 @@ export class AuthService {
         })
         .pipe(
             catchError(this.handleError), 
-            //tap(this.handleAuthentication) // NO: "this" get dereferenced if using this syntax
+            //tap(this.handleAuthentication) // NO: "this" gets dereferenced if using this syntax
             tap(resData => {
                 this.handleAuthentication(resData);
               })
@@ -57,7 +55,7 @@ export class AuthService {
         })
         .pipe(
             catchError(this.handleError), 
-            //tap(this.handleAuthentication) // NO: "this" get dereferenced if using this syntax
+            //tap(this.handleAuthentication) // NO: "this" gets dereferenced if using this syntax
             tap(resData => {
                 this.handleAuthentication(resData);
               })

@@ -15,8 +15,9 @@ export class AuthComponent implements OnInit {
   private isLoading: boolean;
   private error: string;
 
-  constructor(private authService: AuthService, private router: Router) { 
-    this.loginMode = false;
+  constructor(private authService: AuthService, private router: Router) {
+    
+    this.loginMode = true;
     this.isLoading = false;
     this.error = null;
   }
