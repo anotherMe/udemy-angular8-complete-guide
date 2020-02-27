@@ -23,6 +23,7 @@ export class AuthService {
 
     private FIREBASE_API_KEY = 'AIzaSyD1Gm7KQfrmCfP9GepBLpY6wOj5OI9B0ec';
     public userSubject = new BehaviorSubject<User>(null);
+    private expirationTimeoutTimer: any;
 
     constructor(private http: HttpClient, private router: Router) {
     }
@@ -67,7 +68,7 @@ export class AuthService {
     /**
      * Check if user credentials are already stored locally and perform login
      */
-    autologin() {
+    autoLogin() {
 
         const userData = JSON.parse( localStorage.getItem('userData') );
         if (!userData)
@@ -79,10 +80,18 @@ export class AuthService {
 
     }
 
+    // autoLogout(expirationDuration: number) {
+    //     this.expirationTimeoutTimer = setTimeout( () => {
+    //         this.logout()
+    //     }, expirationDuration);
+    // }
+
     logout() {
         this.userSubject.next(null);
         localStorage.removeItem('userData');
         this.router.navigate(['/auth']);
+        if (this.expirationTimeoutTimer)
+            clearTimeout(this.expirationTimeoutTimer);
     }
 
     private handleAuthentication(respData: AuthResponseData) {
