@@ -64,15 +64,35 @@ export class AuthService {
 
     }
 
+    /**
+     * Check if user credentials are already stored locally and perform login
+     */
+    autologin() {
+
+        const userData = JSON.parse( localStorage.getItem('userData') );
+        if (!userData)
+            return;
+
+        const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+        if (loadedUser.token) // here we simply check if the user has a valid token
+            this.userSubject.next(loadedUser);
+
+    }
+
     logout() {
         this.userSubject.next(null);
+        localStorage.removeItem('userData');
         this.router.navigate(['/auth']);
     }
 
     private handleAuthentication(respData: AuthResponseData) {
+
         const expirationDate = new Date(new Date().getTime() + +respData.expiresIn * 1000);
         const user = new User(respData.email, respData.localId, respData.idToken, expirationDate);
-        this.userSubject.next(user);
+        this.userSubject.next(user); // emit user has changed
+
+        // save user to local storage too
+        localStorage.setItem('userData', JSON.stringify(user));
     }
 
     private handleError(err: HttpErrorResponse) {
