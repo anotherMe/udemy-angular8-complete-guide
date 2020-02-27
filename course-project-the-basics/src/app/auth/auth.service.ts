@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
 
@@ -23,7 +24,7 @@ export class AuthService {
     private FIREBASE_API_KEY = 'AIzaSyD1Gm7KQfrmCfP9GepBLpY6wOj5OI9B0ec';
     public userSubject = new BehaviorSubject<User>(null);
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private router: Router) {
     }
 
     signUp(_email: string, _password: string) {
@@ -61,6 +62,11 @@ export class AuthService {
               })
         );
 
+    }
+
+    logout() {
+        this.userSubject.next(null);
+        this.router.navigate(['/auth']);
     }
 
     private handleAuthentication(respData: AuthResponseData) {
