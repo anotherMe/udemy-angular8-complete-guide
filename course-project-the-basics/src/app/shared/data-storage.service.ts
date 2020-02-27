@@ -26,25 +26,19 @@ export class DataStorageService {
         this.http
             .put('https://udemy-course-project-def1d.firebaseio.com/recipes.json', recipes)
             .subscribe( response => {
-                // console.log(response);
+                console.log(response);
             });
     }
 
     fetchRecipes() {
 
         // See Udemy - Angular Complete Guide, lesson 300
-        return this.authService.userSubject
+    
+        return this.http
+        .get<Recipe[]>('https://udemy-course-project-def1d.firebaseio.com/recipes.json')
         .pipe(
-            
-            take(1),
-        
-            exhaustMap( user => {
 
-                return this.http.get<Recipe[]>('https://udemy-course-project-def1d.firebaseio.com/recipes.json', {
-                    params: new HttpParams().set('auth', user.token)
-                });
-
-            }), map(recipes => {
+            map(recipes => {
 
                 return recipes.map( recipe => {
                     
@@ -61,7 +55,7 @@ export class DataStorageService {
                 this.recipeService.setRecipes(recipes);
 
             })
-        
+    
         );
     }
 }
